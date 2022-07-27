@@ -61,7 +61,9 @@ jobs:
       - name: dev Docker build & push
         if: contains(github.ref, 'develop')
         run: |
-          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+          docker login
+          ${{ secrets.DOCKER_USERNAME }} 
+          ${{ secrets.DOCKER_PASSWORD }}
           docker build -f Dockerfile-dev -t ${{ secrets.DOCKER_REPO }}/nooblol-dev .
           docker push ${{ secrets.DOCKER_REPO }}/nooblol-dev
 
