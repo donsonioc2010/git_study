@@ -1,0 +1,13 @@
+#DB
+datasource:
+  url: jdbc:log4jdbc:mariadb://localhost:3306/nooblol?characterEncoding=UTF-8&serverTimezone=UTC
+  username: nooblol
+  password: nooblol_dba
+  driver-class-name: org.mariadb.jdbc.Driver
+
+jpa:
+  hibernate:
+    ddl-auto: create-drop
+
+server:
+  port: 8081

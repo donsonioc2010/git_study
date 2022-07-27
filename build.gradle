@@ -21,21 +21,10 @@ dependencies {
     testImplementation group: 'com.h2database', name: 'h2', version: '1.4.200'
 }
 
-
-sourceSets {
-    ext.profile = (!project.hasProperty('profile') || !profile) ? 'local' : profile
-    println "current profile : ${profile}"
-    main {
-        java {
-            srcDirs "src/main/java"
-        }
-        resources {
-            srcDirs "src/main/resources", "src/main/resources/profiles"
-        }
-    }
-}
-
 tasks.named('test') {
     useJUnitPlatform()
 }
 
+jar {
+    enabled(false)
+}
