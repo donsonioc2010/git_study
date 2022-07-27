@@ -40,11 +40,11 @@ jobs:
         shell: bash
 
       - name: Build with Gradle
-        run: ./gradlew build -x test
+        run: ./gradlew build -x test -Pprofile=local
         shell: bash
 
       - name: Test with Gradle
-        run: SPRING_PROFILES_ACTIVE=[local] ./gradlew test
+        run: SPRING_PROFILES_ACTIVE=[test] ./gradlew test -Pprofile=local
         shell: bash
 
       - name: Publish Unit Test Test Result
