@@ -5,22 +5,27 @@
 # This workflow will build a Java project with Gradle and cache/restore any dependencies to improve the workflow execution time
 # For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-gradle
 
-name: Java CI with Gradle
+name: CI Test
 
 on:
   push:
-    branches: [ "main" ]
+    branches:
+      - 'feature/*'
   pull_request:
-    branches: [ "main" ]
+    branches:
+      - 'develop'
+      - 'feature/*'
 
 permissions:
   contents: read
 
 jobs:
-  test:
-    runs-on: ubuntu-latest
+  Test:
+    ## Naver Dev-Server OS : ubuntu-18.04
+    runs-on: ubuntu-18.04
 
     steps:
+      ## JDK Setting
       - name: Checkout
         uses: actions/checkout@v3
       - name: Set up JDK 11
@@ -29,9 +34,21 @@ jobs:
           java-version: '11'
           distribution: 'temurin'
 
-      - name: GrantExecute permission for gradlew
+      ## Gradle
+      - name: Grant Execute permission for gradlew
         run: chmod +x gradlew
         shell: bash
-      - name: Test with Gradle
-        run: ./gradlew test
+
+      - name: Build with Gradle
+        run: ./gradlew build -x test
         shell: bash
+
+      - name: Test with Gradle
+        run: SPRING_PROFILES_ACTIVE=[test] ./gradlew test
+        shell: bash
+
+      - name: Publish Unit Test Test Result
+        uses: EnricoM1/publish-unit-test-result-action@v1
+        if: ${{ always() }}
+        with:
+          files: build/test-results/**/*.xml
