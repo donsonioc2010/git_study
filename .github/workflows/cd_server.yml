@@ -1,0 +1,107 @@
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+# This workflow will build a Java project with Gradle and cache/restore any dependencies to improve the workflow execution time
+# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-gradle
+
+name: CD server
+
+on:
+  push:
+    branches:
+      - 'develop'
+      - 'main'
+
+jobs:
+  CD:
+    runs-on: ubuntu-latest
+
+    steps:
+      ## JDK Setting
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Set up JDK 11
+        uses: actions/setup-java@v3
+        with:
+          java-version: '11'
+          distribution: 'temurin'
+
+      ## Main Branch Make yml
+      - name: make application-prod.properties
+        if: contains(github.ref, 'main')
+        run: |
+          cd ./src/main/resources
+          touch ./application-prod.properties
+          echo "${{ secrets.PROPERTIES_PROD }}" > ./application-prod.properties
+        shell: bash
+
+      ## Gradle
+      - name: Grant Execute permission for gradlew
+        run: chmod +x gradlew
+        shell: bash
+
+      - name: Build with Gradle
+        run: ./gradlew build -x test
+        shell: bash
+
+      #develop Branch Test
+      - name: Develop Test
+        if: contains(github.ref, 'develop')
+        run: SPRING_PROFILES_ACTIVE=[dev] ./gradlew clean test
+        shell: bash
+
+      #Main Branch Test
+      - name: main Test
+        if: contains(github.ref, 'main')
+        run: SPRING_PROFILES_ACTIVE=[prod] ./gradlew clean test
+        shell: bash
+
+      #Develop Docker build & push
+      - name: dev Docker build & push
+        if: contains(github.ref, 'develop')
+        run: |
+          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+          docker build -f Dockerfile-dev -t ${{ secrets.DOKCER_REPO }}/nooblol-dev .
+          docker push ${{ secrets.DOCKER_REPO }}/nooblol-dev
+
+      #Main Branch Docker build & push
+      - name: prod Docker build & push
+        if: contains(github.ref, 'main')
+        run: |
+          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+          docker build -f Dockerfile-prod -t ${{ secrets.DOKCER_REPO }}/nooblol-prod .
+          docker push ${{ secrets.DOCKER_REPO }}/nooblol-prod
+
+      #Devlop Deploy
+      - name: Deploy to Dev
+        uses: appleboy/ssh-action@master
+        id: deploy-dev
+        if: contains(github.ref, 'develop')
+        with:
+          host: ${{ secrets.SERVER_DEV_IP }}
+          username: ${{ SERVER_DEV_USER }}
+          password: ${{ SERVER_DEV_PASSWORD }}
+          port: ${{ SERVER_DEV_SSH_PORT }}
+          script: |
+            sudo docker rm -f $(docker ps -qa)
+            sudo docker pull ${{ secrets.DOCKER_REPO }}/nooblol-dev
+            docker-compose up -d
+            docker image prune -f
+
+      # Main Deploy
+      #- name: Deploy to Prod
+      #  uses: appleboy/ssh-action@master
+      #  id: deploy-prod
+      #  if: contains(github.ref, 'main')
+      #  with:
+      #    host: ${{ secrets.SERVER_DEV_IP }}
+      #    username: ${{ SERVER_DEV_USER }}
+      #    password: ${{ SERVER_DEV_PASSWORD }}
+      #    port: ${{ SERVER_DEV_SSH_PORT }}
+      #    script: |
+      #      sudo docker rm -f $(docker ps -qa)
+      #      sudo docker pull ${{ secrets.DOCKER_REPO }}/dotoriham-dev
+      #      docker-compose up -d
+      #      docker image prune -f
+
