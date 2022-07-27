@@ -17,7 +17,6 @@ on:
       - 'develop'
       - 'feature/*'
 
-permissions:
   permissions:
     contents: read
     packages: write
