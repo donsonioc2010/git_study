@@ -18,8 +18,8 @@ on:
       - 'feature/*'
 
 permissions:
-  contents: read
-  packages: write
+  contents: read-all
+  packages: write-all
 
 jobs:
   CI-Local-Test:
