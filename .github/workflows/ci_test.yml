@@ -18,7 +18,7 @@ on:
       - 'feature/*'
 
 permissions:
-  contents: read-all write-all
+  contents: read-all|write-all
 
 jobs:
   CI-Local-Test:
