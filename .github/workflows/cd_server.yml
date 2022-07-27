@@ -42,7 +42,9 @@ jobs:
         shell: bash
 
       - name: Build with Gradle
-        run: ./gradlew build -x test
+        run: |
+          ./gradlew build -x test
+          ls ./build/libs
         shell: bash
 
       #develop Branch Test
