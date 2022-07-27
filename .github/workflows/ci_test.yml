@@ -17,8 +17,7 @@ on:
       - 'develop'
       - 'feature/*'
 
-permissions:
-  contents: read-all|write-all
+permissions: read-all|write-all
 
 jobs:
   CI-Local-Test:
