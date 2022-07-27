@@ -17,9 +17,9 @@ on:
       - 'develop'
       - 'feature/*'
 
-  permissions:
-    contents: read
-    packages: write
+permissions:
+  contents: read
+  packages: write
 
 jobs:
   CI-Local-Test:
