@@ -20,7 +20,7 @@ permissions:
   contents: read
 
 jobs:
-  Test:
+  CI-Local-Test:
     ## Naver Dev-Server OS : ubuntu-18.04
     runs-on: ubuntu-18.04
 
