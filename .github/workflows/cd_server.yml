@@ -89,8 +89,6 @@ jobs:
             sudo docker pull ${{ secrets.DOCKER_REPO }}/nooblol-dev
             docker-compose up -d
             docker image prune -f
-            docker exec -it $(docker ps -a -f "nooblol-dev") /bin/bash
-            java -jar -Dspring.profiles.active=dev app.jar
 
 # Main Deploy
 #- name: Deploy to Prod
