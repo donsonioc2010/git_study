@@ -84,24 +84,25 @@ jobs:
           password: ${{ secrets.SERVER_DEV_PASSWORD }}
           port: ${{ secrets.SERVER_DEV_SSH_PORT }}
           script: |
-            sudo docker rm -f $(docker ps -qa)
+            sudo docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+            sudo docker rm -f $(docker ps -q -a)
             sudo docker pull ${{ secrets.DOCKER_REPO }}/nooblol-dev
             docker-compose up -d
             docker image prune -f
 
-      # Main Deploy
-      #- name: Deploy to Prod
-      #  uses: appleboy/ssh-action@master
-      #  id: deploy-prod
-      #  if: contains(github.ref, 'main')
-      #  with:
-      #    host: ${{ secrets.SERVER_DEV_IP }}
-      #    username: ${{ secrets.SERVER_DEV_USER }}
-      #    password: ${{ secrets.SERVER_DEV_PASSWORD }}
-      #    port: ${{ secrets.SERVER_DEV_SSH_PORT }}
-      #    script: |
-      #      sudo docker rm -f $(docker ps -qa)
-      #      sudo docker pull ${{ secrets.DOCKER_REPO }}/nooblol-dev
-      #      docker-compose up -d
-      #      docker image prune -f
+# Main Deploy
+#- name: Deploy to Prod
+#  uses: appleboy/ssh-action@master
+#  id: deploy-prod
+#  if: contains(github.ref, 'main')
+#  with:
+#    host: ${{ secrets.SERVER_DEV_IP }}
+#    username: ${{ secrets.SERVER_DEV_USER }}
+#    password: ${{ secrets.SERVER_DEV_PASSWORD }}
+#    port: ${{ secrets.SERVER_DEV_SSH_PORT }}
+#    script: |
+#      sudo docker rm -f $(docker ps -q -a)
+#      sudo docker pull ${{ secrets.DOCKER_REPO }}/nooblol-dev
+#      docker-compose up -d
+#      docker image prune -f
 
