@@ -11,3 +11,6 @@ jpa:
 
 server:
   port: 8081
+
+test:
+  value: 메롱
