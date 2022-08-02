@@ -83,6 +83,7 @@ jobs:
           port: ${{ secrets.SERVER_DEV_SSH_PORT }}
           script: |
             cd /nooblol
+            chmod +x app.jar
             java -jar -Dspring.profiles.active=dev ./app.jar
 
 # Main Deploy
