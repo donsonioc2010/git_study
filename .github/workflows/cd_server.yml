@@ -81,6 +81,7 @@ jobs:
           username: ${{ secrets.SERVER_DEV_USER }}
           password: ${{ secrets.SERVER_DEV_PASSWORD }}
           port: ${{ secrets.SERVER_DEV_SSH_PORT }}
+          script_stop: true
           script: |
             cd /nooblol
             ./dev-run.sh
