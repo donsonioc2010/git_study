@@ -82,9 +82,8 @@ jobs:
           password: ${{ secrets.SERVER_DEV_PASSWORD }}
           port: ${{ secrets.SERVER_DEV_SSH_PORT }}
           script: |
-            cd /nooblol
-            chmod +x app.jar
-            java -jar -Dspring.profiles.active=dev ./app.jar
+            chmod +x /nooblol/build/libsapp.jar
+            java -jar -Dspring.profiles.active=dev /nooblol/build/libs/app.jar
 
 # Main Deploy
 #- name: Deploy to Prod
