@@ -85,6 +85,7 @@ jobs:
           script: |
             cd /nooblol
             ./dev-run.sh
+            exitg
 
 # Main Deploy
 #- name: Deploy to Prod
