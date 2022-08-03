@@ -32,9 +32,22 @@ jobs:
           java-version: '11'
           distribution: 'temurin'
 
+      ## Main Branch Make yml
+      - name: make application-prod.properties
+        if: contains(github.ref, 'develop')
+        run: |
+          cd ./src/main/resources
+          sed -i'' -e  's/riot-api-key/${{ secrets.APIKEY }}/g' constants.yml 
+          rm  constants.yml.bak
+          cat constants.yml
+        shell: bash
+
       ## Gradle
       - name: Grant Execute permission for gradlew
-        run: chmod +x gradlew
+        run: |
+          pwd
+          chmod +x gradlew
+
         shell: bash
 
       - name: Build with Gradle
