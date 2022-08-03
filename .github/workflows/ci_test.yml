@@ -39,7 +39,7 @@ jobs:
           cd ./src/main/resources
           chmod 755 constants.yml
           sed -i 's/riot-api-key/${{ secrets.APIKEY }}/g' constants.yml 
-          rm  constants.yml.bak
+          ls -a 
           cat constants.yml
         shell: bash
 
