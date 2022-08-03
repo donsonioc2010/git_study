@@ -37,9 +37,8 @@ jobs:
         if: contains(github.ref, 'develop')
         run: |
           cd ./src/main/resources
-          ls -a
           chmod 755 constants.yml
-          sed -i .bak -e  's/riot-api-key/${{ secrets.APIKEY }}/g' constants.yml 
+          sed -i 's/riot-api-key/${{ secrets.APIKEY }}/g' constants.yml 
           rm  constants.yml.bak
           cat constants.yml
         shell: bash
